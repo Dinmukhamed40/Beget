@@ -1,0 +1,6 @@
+Django==5.2.1 
+Pillow
+requests
+whitenoise
+sqlparse
+asgiref

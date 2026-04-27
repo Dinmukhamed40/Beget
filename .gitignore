@@ -1,7 +1,8 @@
-".venv/" 
-"__pycache__/" 
-"*.pyc" 
-"db.sqlite3" 
-"media/" 
-".idea/" 
-"staticfiles/" 
+.venv/ 
+.idea/ 
+__pycache__/ 
+*.pyc 
+db.sqlite3 
+media/ 
+staticfiles/ 
+python 
