@@ -1,0 +1,101 @@
+{% extends 'users/base.html' %}
+{% block title %}GamerVerse | Викторина{% endblock %}
+
+{% block content %}
+<style>
+    .question-item { display: none; padding: 20px; }
+    .question-item.active { display: block; }
+    .quiz-card { background: white; padding: 40px; border-radius: 0 0 20px 0; max-width: 600px; margin: 50px auto; color: black; }
+    .btn-reg { background: #e62429; color: white; border: none; padding: 10px 25px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+    .radio-group { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+</style>
+
+<div class="quiz-card">
+    <div id="quiz-header">
+        <h1 id="quiz-title" style="font-size: 2rem; margin-bottom: 10px;">АНАЛИЗ ЭФФЕКТИВНОСТИ</h1>
+        <p id="step-indicator" style="font-weight: bold; color: #666;">ВОПРОС 1 ИЗ 10</p>
+    </div>
+
+    <form id="feedback-form">
+        <div class="question-item active">
+            <p>1. Как быстро вы нашли кнопку "Регистрация"?</p>
+            <div class="radio-group"><input type="radio" name="q1" value="5" id="q1a"> <label for="q1a">Менее 1 секунды</label></div>
+            <div class="radio-group"><input type="radio" name="q1" value="1" id="q1b"> <label for="q1b">Более 3 секунд</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>2. Удобно ли расположены элементы навигации?</p>
+            <div class="radio-group"><input type="radio" name="q2" value="5" id="q2a"> <label for="q2a">Да, интуитивно</label></div>
+            <div class="radio-group"><input type="radio" name="q2" value="2" id="q2b"> <label for="q2b">Приходится искать</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>3. Насколько читабелен текст на черном фоне?</p>
+            <div class="radio-group"><input type="radio" name="q3" value="5" id="q3a"> <label for="q3a">Отлично читается</label></div>
+            <div class="radio-group"><input type="radio" name="q3" value="2" id="q3b"> <label for="q3b">Глаза устают</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>4. Насколько быстро загружается контент?</p>
+            <div class="radio-group"><input type="radio" name="q4" value="5" id="q4a"> <label for="q4a">Мгновенно</label></div>
+            <div class="radio-group"><input type="radio" name="q4" value="3" id="q4b"> <label for="q4b">Есть задержки</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>5. Понятна ли тематика сайта с первого взгляда?</p>
+            <div class="radio-group"><input type="radio" name="q5" value="5" id="q5a"> <label for="q5a">Да, это ГИК-портал</label></div>
+            <div class="radio-group"><input type="radio" name="q5" value="1" id="q5b"> <label for="q5b">Не сразу понял</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>6. (ГИК-ТЕСТ) Кто из этих героев не является Мстителем?</p>
+            <div class="radio-group"><input type="radio" name="q6" value="5" id="q6a"> <label for="q6a">Бэтмен</label></div>
+            <div class="radio-group"><input type="radio" name="q6" value="5" id="q6b"> <label for="q6b">Железный человек</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>7. Насколько удобна форма поиска по базе?</p>
+            <div class="radio-group"><input type="radio" name="q7" value="5" id="q7a"> <label for="q7a">Удобно</label></div>
+            <div class="radio-group"><input type="radio" name="q7" value="2" id="q7b"> <label for="q7b">Неудобно</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>8. Полезен ли функционал "Подсветить важное"?</p>
+            <div class="radio-group"><input type="radio" name="q8" value="5" id="q8a"> <label for="q8a">Да, крутая фишка</label></div>
+            <div class="radio-group"><input type="radio" name="q8" value="1" id="q8b"> <label for="q8b">Бесполезно</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>9. Как вы оцениваете дизайн карточек новостей?</p>
+            <div class="radio-group"><input type="radio" name="q9" value="5" id="q9a"> <label for="q9a">Современно</label></div>
+            <div class="radio-group"><input type="radio" name="q9" value="2" id="q9b"> <label for="q9b">Устарело</label></div>
+            <button type="button" class="btn-reg" onclick="nextStep()">ДАЛЕЕ</button>
+        </div>
+
+        <div class="question-item">
+            <p>10. Готовы ли вы рекомендовать GamerVerse?</p>
+            <div class="radio-group"><input type="radio" name="q10" value="5" id="q10a"> <label for="q10a">Определенно!</label></div>
+            <div class="radio-group"><input type="radio" name="q10" value="0" id="q10b"> <label for="q10b">Вряд ли</label></div>
+            <button type="button" class="btn-reg" onclick="processFeedback()">ИТОГ</button>
+        </div>
+    </form>
+
+    <div id="thank-you" style="display:none; text-align: center;">
+        <h3 style="color: #e62429; font-size: 1.5rem;">МИССИЯ ВЫПОЛНЕНА</h3>
+        <div style="background: #f4f4f4; padding: 20px; border-radius: 10px; margin-top: 20px;">
+            <p><strong>Результат расчета (Закон Фиттса):</strong></p>
+            <p id="calc-formula" style="font-family: monospace; font-size: 0.9rem; color: #555;"></p>
+            <p style="font-size: 1.2rem; margin-top: 10px;">T = <span id="calc-result" style="color: #e62429; font-weight: bold;"></span> сек.</p>
+        </div>
+        <button onclick="location.reload()" class="btn-reg">ПРОЙТИ ЗАНОВО</button>
+    </div>
+</div>
+{% endblock %}

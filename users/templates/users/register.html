@@ -1,0 +1,33 @@
+{% extends 'users/base.html' %}
+{% block title %}GamerVerse | Регистрация Героя{% endblock %}
+
+{% block content %}
+<div class="register-wrapper">
+    <div id="auth-block" class="reg-form terminal-style">
+        <div class="auth-header">
+            <div class="tab active">РЕГИСТРАЦИЯ В БАЗЕ</div>
+        </div>
+        <div class="terminal-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="scanner-line"></div>
+
+                {% for field in form %}
+                    <div class="input-container">
+                        {{ field }}
+                    </div>
+                    {% if field.errors %}
+                        <p style="color: #e62429; font-size: 11px; margin-top: -10px; margin-bottom: 10px; padding-left: 10px;">
+                            {{ field.errors|striptags }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+
+                <button type="submit" class="btn-reg" style="width: 100%; margin-top: 20px;">
+                    ИНИЦИИРОВАТЬ ДОСТУП
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

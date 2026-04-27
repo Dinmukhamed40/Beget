@@ -1,0 +1,95 @@
+{% extends 'users/base.html' %}
+
+{% block title %}GamerVerse | Главная{% endblock %}
+
+{% block content %}
+<header class="hero">
+    <div class="hero-content">
+        <span class="trending">СЕЙЧАС В ТРЕНДЕ</span>
+        <h1>БАЗА ДАННЫХ ИГРОВЫХ МИРОВ</h1>
+        <p>Информация загружена из базы данных SQLite (Django ORM).</p>
+    </div>
+</header>
+
+<section class="content">
+    <h2 style="text-align: center; margin-bottom: 30px; letter-spacing: 2px;">ГОРЯЧИЕ РЕЛИЗЫ (ДАННЫЕ ИЗ БД)</h2>
+
+    <div class="cards-container">
+        {% for game in games %}
+        <div class="card news-card">
+            <div class="card-image-wrapper">
+                {% if game.image %}
+                    <img src="{{ game.image.url }}" alt="{{ game.title }}" class="game-poster">
+                {% else %}
+                    <div class="no-image">НЕТ ПОСТЕРА</div>
+                {% endif %}
+                <div class="card-tag">{{ game.genre }}</div>
+            </div>
+
+            <div class="card-body">
+                <h3>{{ game.title }}</h3>
+                <p class="description">{{ game.description|truncatewords:20 }}</p>
+                <div class="rating-badge">РЕЙТИНГ: {{ game.rating }}/10</div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #666;">В базе данных пока нет игр. Добавьте их в админ-панели.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .news-card {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .news-card:hover {
+        transform: translateY(-5px);
+        border-color: #e62429;
+    }
+
+    .card-image-wrapper {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .game-poster {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .rating-badge {
+        display: inline-block;
+        margin-top: 10px;
+        color: #e62429;
+        font-weight: bold;
+        border: 1px solid #e62429;
+        padding: 2px 10px;
+        font-size: 12px;
+    }
+
+    .description {
+        font-size: 14px;
+        color: #ccc;
+        height: 60px;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

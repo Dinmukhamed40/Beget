@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>GamerVerse | Главная</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+</head>
+<body>
+<nav class="menu">
+    <h2 class="logo">GAMER<span>VERSE</span></h2>
+    <div class="nav-links">
+        <a href="{% url 'home' %}">НОВОСТИ</a>
+        <a href="{% url 'about' %}">О ПРОЕКТЕ</a>
+        <a href="{% url 'account' %}">АККАУНТ</a>
+        <a href="{% url 'quiz' %}">ВИКТОРИНА</a>
+        <a href="{% url 'mood' %}">НАСТРОЕНИЕ</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="hero-content">
+        <h1>ГТА 6: НОВЫЕ ПОДРОБНОСТИ</h1>
+        <div class="search-box">
+            <input type="text" id="quick-search" placeholder="Поиск...">
+            <button class="btn-highlight">Найти</button>
+        </div>
+    </div>
+</header>
+
+<div class="chat-widget-button" onclick="toggleChat()">НУЖНА ПОМОЩЬ?</div>
+<div class="chat-widget-window" id="chatWindow">
+    <div class="chat-header"><span>S.H.I.E.L.D. HELPLINE</span><button onclick="toggleChat()">X</button></div>
+    <div id="widget-chat-log"></div>
+    <div class="chat-footer">
+        <input type="text" id="widget-input" placeholder="Запрос...">
+        <button onclick="sendWidgetMessageAdapter()">></button>
+    </div>
+</div>
+
+<script src="{% static 'users/script.js' %}"></script>
+<script>function sendWidgetMessageAdapter() { sendWidgetMessage('{{ csrf_token }}', '{% url "chat" %}'); }</script>
+</body>
+</html>

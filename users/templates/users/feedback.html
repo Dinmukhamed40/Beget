@@ -1,0 +1,36 @@
+{% extends 'users/base.html' %}
+{% block title %}Диагностика - GamerVerse{% endblock %}
+
+{% block content %}
+<div class="feedback-page">
+    <div class="mood-intro">
+        <h2>СИСТЕМА <br><span>АНАЛИЗА СОСТОЯНИЯ</span></h2>
+        <p>Для доступа к секретным архивам GamerVerse, подтвердите ваш текущий статус биоритмов.</p>
+
+        <div class="mood-icons">
+            <div class="mood-item" style="cursor:pointer;" onclick="setMood('отлично')">🔥 <span>Эпично</span></div>
+            <div class="mood-item" style="cursor:pointer;" onclick="setMood('нормально')">🛡️ <span>Готов</span></div>
+            <div class="mood-item" style="cursor:pointer;" onclick="setMood('плохо')">💀 <span>Нужен отдых</span></div>
+        </div>
+    </div>
+
+    <div class="reg-form diagnostic-box">
+        <div class="scanner-line"></div>
+        <h3>БОРТОВОЙ ЖУРНАЛ</h3>
+        <p style="font-size: 12px; margin-bottom: 20px;">Введите текстовый отчет о самочувствии:</p>
+
+        <textarea id="user-text" placeholder="Например: Я чувствую себя как Халк..." oninput="analyzeMood()"></textarea>
+
+        <div class="status-display" style="margin: 20px 0; padding: 10px; background: #1a1a1a; border-radius: 5px;">
+            <span class="status-label">СТАТУС ОБЪЕКТА:</span>
+            <span id="mood-result" style="font-weight: bold; color: #fff;">ОЖИДАНИЕ ДАННЫХ</span>
+        </div>
+
+        <div id="ai-suggestion" class="ai-box" style="display: none; background: #e62429; color: white; padding: 10px; margin-bottom: 10px;">
+            <p id="mood-advice"></p>
+        </div>
+
+        <button onclick="saveReport()" class="btn-reg">СОХРАНИТЬ В БАЗУ</button>
+    </div>
+</div>
+{% endblock %}

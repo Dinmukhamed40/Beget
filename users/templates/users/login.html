@@ -1,0 +1,23 @@
+{% extends 'users/base.html' %}
+{% block title %}GamerVerse | Вход в систему{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <div class="auth-header">
+        <h1>ВХОД В ШТАБ</h1>
+        <p>Авторизуйтесь для доступа к профилю</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn-reg">ВОЙТИ</button>
+    </form>
+
+    <div class="auth-footer">
+        <p>Еще нет аккаунта? <a href="{% url 'register' %}">Создать профиль</a></p>
+    </div>
+</div>
+{% endblock %}

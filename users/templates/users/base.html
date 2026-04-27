@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GamerVerse{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+    <style>
+        body.dark-mode { background: #0f0f0f; color: #ffffff; }
+        body.light-mode { background: #f4f4f4; color: #1a1a1a; }
+        body.light-mode .menu { background: #222; }
+        body.light-mode .card,
+        body.light-mode .news-card { background: #fff; color: #333; border-color: #ddd; }
+        body.light-mode #widget-chat-log { background: #222; }
+        body.light-mode .description { color: #555; }
+
+        .theme-toggle {
+            cursor: pointer;
+            background: #e62429;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            font-weight: bold;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 12px;
+            margin-left: 20px;
+            transition: 0.3s;
+        }
+        .theme-toggle:hover { background: #ff2b31; }
+
+        .chat-widget-window {
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 320px;
+            z-index: 10000;
+            border: 2px solid #e62429;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(230, 36, 41, 0.4);
+        }
+    </style>
+    <script>
+        // Применяем тему сразу — без мигания
+        (function() {
+            const theme = localStorage.getItem('gamerverse-theme') || 'dark-mode';
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('main-body').className = theme;
+                const btn = document.getElementById('theme-btn');
+                if (btn) btn.textContent = theme === 'light-mode' ? '☀️ РЕЖИМ' : '🌙 РЕЖИМ';
+            });
+        })();
+    </script>
+</head>
+<body id="main-body" class="dark-mode">
+
+<nav class="menu">
+    <h2 class="logo">GAMER<span>VERSE</span></h2>
+    <div class="nav-links">
+        <a href="{% url 'home' %}">НОВОСТИ</a>
+        <a href="{% url 'about' %}">О ПРОЕКТЕ</a>
+        <a href="{% url 'quiz' %}">ВИКТОРИНА</a>
+        <a href="{% url 'mood' %}">НАСТРОЕНИЕ</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'account' %}">АККАУНТ</a>
+            <a href="{% url 'logout' %}">ВЫХОД</a>
+        {% else %}
+            <a href="{% url 'login' %}">ВХОД</a>
+            <a href="{% url 'register' %}">РЕГИСТРАЦИЯ</a>
+        {% endif %}
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙 РЕЖИМ</button>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<!-- ЧАТ-ВИДЖЕТ -->
+<div id="chat-widget-container">
+    <div class="chat-widget-button" onclick="toggleChat()">💬 НУЖНА ПОМОЩЬ?</div>
+
+    <div class="chat-widget-window" id="chatWindow">
+        <div class="chat-header" style="background:#e62429;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-weight:bold;font-size:13px;letter-spacing:1px;">⚡ S.H.I.E.L.D. HELPLINE</span>
+            <button onclick="toggleChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:22px;line-height:1;">&times;</button>
+        </div>
+
+        <div id="widget-chat-log" style="background:#111;height:260px;overflow-y:auto;padding:12px;color:white;font-size:13px;text-transform:none;">
+            <div style="color:#e62429;margin-bottom:10px;font-weight:bold;">S.H.I.E.L.D: Система активна. Чем могу помочь, агент?</div>
+        </div>
+
+        <div class="chat-footer" style="display:flex;gap:5px;padding:10px;background:#1a1a1a;">
+            <input type="text" id="widget-input" placeholder="Введите запрос..."
+                   style="flex:1;background:#222;color:white;border:1px solid #444;padding:8px;border-radius:4px;font-size:13px;"
+                   onkeydown="if(event.key==='Enter') sendWidgetMessageAdapter()">
+
+            <button id="widget-mic-btn" type="button" onclick="startVoiceInput()"
+                    style="background:#333;border:none;border-radius:4px;padding:0 10px;cursor:pointer;color:white;font-size:16px;"
+                    title="Голосовой ввод">
+                <span id="mic-icon">🎤</span>
+            </button>
+
+            <button type="button" onclick="sendWidgetMessageAdapter()"
+                    style="background:#e62429;color:white;border:none;padding:8px 14px;cursor:pointer;border-radius:4px;font-weight:bold;font-size:16px;">
+                &#9658;
+            </button>
+        </div>
+    </div>
+</div>
+
+{% csrf_token %}
+
+<footer style="text-align:center;padding:20px;background:#000;color:#555;font-size:12px;border-top:1px solid #222;margin-top:40px;">
+    <p>© 2026 GAMERVERSE | Твой гид по мультивселенной</p>
+</footer>
+
+<script src="{% static 'users/script.js' %}"></script>
+<script>
+    function sendWidgetMessageAdapter() {
+        const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        sendWidgetMessage(token, '{% url "chat" %}');
+    }
+
+    function toggleTheme() {
+        const body = document.getElementById('main-body');
+        const btn = document.getElementById('theme-btn');
+        if (body.classList.contains('dark-mode')) {
+            body.classList.replace('dark-mode', 'light-mode');
+            localStorage.setItem('gamerverse-theme', 'light-mode');
+            if (btn) btn.textContent = '☀️ РЕЖИМ';
+        } else {
+            body.classList.replace('light-mode', 'dark-mode');
+            localStorage.setItem('gamerverse-theme', 'dark-mode');
+            if (btn) btn.textContent = '🌙 РЕЖИМ';
+        }
+    }
+</script>
+</body>
+</html>
